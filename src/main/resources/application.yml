@@ -1,0 +1,64 @@
+####################################
+# Port & Project Name
+####################################
+server:
+  port: 8080                    # ?? ??
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  application:
+    name: SBB
+
+  devtools:
+    livereload:
+      enabled: true
+      port: 35729
+    restart:
+      enabled: true
+
+  profiles:
+    include: secret  # application-secret.yml를 자동 병합
+
+
+  ####################################
+  # MySQL ??
+  ####################################
+  datasource:
+    url: jdbc:oracle:thin:@//121.65.47.74:4040/XE
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  ####################################
+  # JPA ??
+  ####################################
+  jpa:
+    open-in-view: true      #
+    hibernate:
+      ddl-auto: update      # create, update, ...
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy # ?????? ?????? ??
+    show-sql: true          # SQL ?? ??
+    properties:
+      hibernate:
+        format_sql: true    # SQL ??? ??
+
+  security:
+    user:
+      name: test
+      password: 1111
+      roles: USER
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+        orm:
+          jdbc:
+            bind: trace
