@@ -1,19 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 
-<div layout:fragment="content" class="container my-3">
-    <div>
-        <h1 class="text-center">SBB 시작 페이지</h1>
-        <div class="text-center">
-            <img th:src="@{/images/background.jpg}"
-                 alt="배경 이미지"
-                 class="img-fluid"
-                 style="height: 500px; width: auto; "
-            >
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <title>도서 검색</title>
+    <style>
+        .book-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 16px;
+            background: #fafafa;
+        }
+
+        .book-card img {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+
+<div layout:fragment="content" class="container my-5">
+
+    <!-- 페이지 제목 -->
+    <h1 class="text-center mb-4">📚 네이버 도서 검색</h1>
+
+    <!-- 검색 UI -->
+    <div class="input-group mb-4">
+        <input type="text"
+               id="searchInput"
+               class="form-control"
+               placeholder="검색어를 입력하세요">
+
+        <button class="btn btn-primary" onclick="searchBook()">검색</button>
     </div>
 
+    <!-- 검색 결과 출력 -->
+    <div id="result"></div>
+
 </div>
+<th:block layout:fragment="script">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript">
+
+        async function searchBook() {
+      const query = document.getElementById("searchInput").value;
+
+      const res = await fetch(`/api/books/search?query=${encodeURIComponent(query)}`);
+      const data = await res.json();   // JSON 객체로 파싱
+
+      const items = data.items; // 책 목록 배열
+
+      let html = "";
+
+      items.forEach(book => {
+          html += `
+              <div class="book-card">
+                  <img src="${book.image}" width="80" alt="책 이미지">
+                  <div>
+                      <h4>${book.title}</h4>
+                      <p><strong>저자:</strong> ${book.author}</p>
+                      <p><strong>출판사:</strong> ${book.publisher}</p>
+                      <p><strong>출간일:</strong> ${book.pubdate}</p>
+                      <a href="${book.link}" target="_blank">상세보기</a>
+                  </div>
+              </div>
+          `;
+      });
+
+      document.getElementById("result").innerHTML = html;
+  }
+
+
+    </script>
+</th:block>
+
 </html>

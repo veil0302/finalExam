@@ -1,10 +1,6 @@
 package com.mysite.sbb.member.dto;
 
-import com.mysite.sbb.member.constant.Department;
 import com.mysite.sbb.member.constant.Gender;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -32,9 +28,6 @@ public class MemberDto {
 
     @NotNull(message = "성별은 필수 항목입니다.")
     private Gender gender; // 성별
-
-    @NotNull(message = "학과명은 필수 항목입니다.")
-    private Department department; // 학과
 
     @AssertTrue(message = "등록(이용) 확인에 동의해야 가입할 수 있습니다.")
     private Boolean active; // 등록 여부

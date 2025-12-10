@@ -22,7 +22,6 @@ public class MemberService {
                 .password(passwordEncoder.encode(memberDto.getPassword1()))
                 .email(memberDto.getEmail())
                 .gender(memberDto.getGender())
-                .department(memberDto.getDepartment())
                 .active(memberDto.getActive())
                 .build();
 

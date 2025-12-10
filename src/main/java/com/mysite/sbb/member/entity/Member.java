@@ -1,12 +1,9 @@
 package com.mysite.sbb.member.entity;
 
 import com.mysite.sbb.audit.BaseTimeEntity;
-import com.mysite.sbb.member.constant.Department;
 import com.mysite.sbb.member.constant.Gender;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -35,10 +32,15 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Gender gender; // 성별
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Department department; // 학과
+    private String profileImage;
+
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private Boolean active; // 등록 여부
+
+    //    private String naverId; 고민 중
+
+
 }
+

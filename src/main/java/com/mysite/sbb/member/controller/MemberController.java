@@ -4,7 +4,6 @@ import com.mysite.sbb.member.dto.MemberDto;
 import com.mysite.sbb.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,19 +30,19 @@ public class MemberController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("========== 로그아웃");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null){
+        if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/";
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "member/login";
     }
 
     @GetMapping("/login/error")
-    public String loginError(Model model){
+    public String loginError(Model model) {
         model.addAttribute("loginError", "아이디 또는 비밀번호를 확인해 주세요.");
         return "member/login";
     }
@@ -52,17 +51,17 @@ public class MemberController {
     public String signup(@Valid MemberDto memberDto, BindingResult bindingResult,
                          Model model) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "member/signup";
         }
 
-        if(!memberDto.getPassword1().equals(memberDto.getPassword2())){
+        if (!memberDto.getPassword1().equals(memberDto.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지 않습니다.");
             return "member/signup";
         }
         try {
             memberService.create(memberDto);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             log.info("================= 회원 가입 실패 : 이미 가입된 사용자 입니다.");
             model.addAttribute("errorMsg", "이미 가입된 사용자 입니다.");
             return "member/signup";
