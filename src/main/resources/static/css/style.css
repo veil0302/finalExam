@@ -1,20 +1,69 @@
-html {
-    position: relative;
-    min-height: 100%;
-    margin: 0;
-}
+   :root {
+            --bg-dark: #2b2b2f;
+            --bg-card: #3a3a40;
+            --text-light: #f2f2f2;
+            --text-muted: #bdbdbd;
+            --accent: #6c63ff;
+        }
 
-body {
-    min-height: 100%;
-    background-color: #cad5e8; /* 원하는 페이지 전체 배경색 */
-}
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            font-family: "Noto Sans KR", sans-serif;
+        }
 
-.content{
-    margin-bottom:50px;
-    margin-top: 50px;
-    margin-left: 200px;
-    margin-right: 200px;
-}
+        .navbar {
+            background: #1f1f22;
+        }
+
+        .navbar a {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin-right: 15px;
+        }
+
+        .card-dark {
+            background: var(--bg-card);
+            border: 1px solid #404046;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 250px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .book-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px;
+            transition: 0.2s;
+        }
+
+        .book-card:hover {
+            background: #47474e;
+            cursor: pointer;
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .book-card h6 {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .category-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
 
 .footer {
     position: absolute;
@@ -26,9 +75,4 @@ body {
     text-align: center;
 }
 
-.container.my-3 {
-    background-color: #ffffff; /* 콘텐츠 영역 배경색 (예: 흰색) */
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+

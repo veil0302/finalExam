@@ -13,7 +13,7 @@
 <body>
 <div class="container my-3">
     <h2>답변</h2>
-    <form method="post" th:object="${answerDto}">
+    <form method="post" th:object="${reviewCommentDto}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <div class="mb-3">
             <label for="content" class="form-label"><strong>내용</strong></label>
