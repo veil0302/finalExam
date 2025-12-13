@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #2b2b2f;
+            --bg-card: #3a3a40;
+            --text-light: #f2f2f2;
+            --text-muted: #bdbdbd;
+            --accent: #6c63ff;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        .navbar {
+            background: #1f1f22;
+        }
+
+        .navbar a {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin-right: 15px;
+        }
+
+        .card-dark {
+            background: var(--bg-card);
+            border: 1px solid #404046;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 250px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .book-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px;
+            transition: 0.2s;
+        }
+
+        .book-card:hover {
+            background: #47474e;
+            cursor: pointer;
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .book-card h6 {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .category-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content" class="container my-5">
+
+
+    <h2 class="fw-bold mb-4"><i class="bi bi-book"></i>
+        내 서재</h2>
+
+    <!-- 그래프 영역 -->
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+
+            <div class="card-dark mb-4">
+                <h5 class="section-title"><i class="bi bi-bar-chart-line"></i>
+                    올해 읽은 책</h5>
+                <canvas id="yearChart"></canvas>
+            </div>
+
+            <div class="card-dark">
+                <h5 class="section-title"><i class="bi bi-graph-up"></i> 평균 독서량 비교</h5>
+                <canvas id="compareChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-dark h-100">
+                <h5 class="section-title"><i class="bi bi-pie-chart"></i>
+                    카테고리별 독서량</h5>
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <br>
+
+
+    <div class="row g-4">
+
+        <!-- 읽을 예정 -->
+        <div class="col-md-4">
+            <div class="book-card" onclick="location.href='#toReadList'">
+                <h5 class="fw-bold">📕 읽을 예정</h5>
+                <p class="category-label">총 5권</p>
+            </div>
+        </div>
+
+        <!-- 읽는 중 -->
+        <div class="col-md-4">
+            <div class="book-card" onclick="location.href='#readingList'">
+                <h5 class="fw-bold">📘 읽는 중</h5>
+                <p class="category-label">총 3권</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="book-card" onclick="location.href='#completedList'">
+                <h5 class="fw-bold">📗 완독</h5>
+                <p class="category-label">총 12권</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Chart.js 스크립트 -->
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        // 올해 읽은 책 (BAR)
+        new Chart(document.getElementById("yearChart"), {
+        type: "bar",
+        data: {
+        labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+        datasets: [{
+        label: "읽은 책 수",
+        data: [2, 1, 3, 2, 5, 3],
+        backgroundColor: "#6c63ff"
+        }]
+        },
+        options: {
+        scales: {
+        y: { ticks: { color: "#fff" } },
+        x: { ticks: { color: "#fff" } }
+        },
+        plugins: { legend: { labels: { color: "#fff" } } }
+        }
+        });
+
+
+        // 평균 독서량 vs 나의 독서량 (LINE CHART)
+        new Chart(document.getElementById("compareChart"), {
+        type: "line",
+        data: {
+        labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+        datasets: [
+        {
+        label: "나의 독서량",
+        data: [2, 1, 3, 2, 5, 3],
+        borderColor: "#6c63ff",
+        backgroundColor: "rgba(108,99,255,0.3)",
+        borderWidth: 2,
+        tension: 0.3
+        },
+        {
+        label: "평균 독서량",
+        data: [1, 1.2, 1.5, 1, 2, 1.8],
+        borderColor: "#f38b4a",
+        backgroundColor: "rgba(243,139,74,0.3)",
+        borderWidth: 2,
+        tension: 0.3
+        }
+        ]
+        },
+        options: {
+        scales: {
+        y: { ticks: { color: "#fff" } },
+        x: { ticks: { color: "#fff" } }
+        },
+        plugins: { legend: { labels: { color: "#fff" } } }
+        }
+        });
+
+
+        // 카테고리별 독서량 (DONUT)
+        new Chart(document.getElementById("categoryChart"), {
+        type: "doughnut",
+        data: {
+        labels: ["문학", "인문", "경제", "자기계발"],
+        datasets: [{
+        data: [5, 3, 2, 4],
+        backgroundColor: ["#6c63ff", "#f38b4a", "#4ac0c0", "#ffcd56"]
+        }]
+        }
+        });
+    </script>
+</th:block>
+</body>
+
+</html>

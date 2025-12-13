@@ -13,21 +13,6 @@
           rel="stylesheet">
 
     <style>
-        .book-card {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            display: flex;
-            gap: 16px;
-            background: #fafafa;
-        }
-
-        .book-card img {
-            border-radius: 8px;
-        }
-
-        /* 추천 캐러셀 높이 조정 */
         .carousel-item img {
             height: 280px;
             object-fit: cover;
@@ -57,7 +42,7 @@
             </div>
 
             <div class="carousel-item">
-                <img src="https://image.aladin.co.kr/product/23814/56/cover500/8937427356_1.jpg"
+                <img src="images/book2.jpg"
                      class="d-block w-100" alt="추천도서2">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>아몬드</h5>
@@ -66,7 +51,7 @@
             </div>
 
             <div class="carousel-item">
-                <img src="https://image.aladin.co.kr/product/28267/20/cover500/k032835340_1.jpg"
+                <img src="images/book3.jpg"
                      class="d-block w-100" alt="추천도서3">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>소년이 온다</h5>
@@ -90,12 +75,11 @@
     </div>
 
 
-
     <form action="/books/search" method="get" class="mb-4">
         <div class="input-group">
             <input type="text" name="query" class="form-control form-control-lg"
                    placeholder="예: 해리포터, 셜록홈즈, 주식, 개발…">
-            <button type="submit" class="btn btn-primary px-4">검색</button>
+            <button type="submit" class="btn btn-primary">검색</button>
         </div>
     </form>
 
@@ -109,22 +93,60 @@
 
     <div th:each="book : ${books}" class="book-card mt-3">
 
-        <img th:src="${book.image}" width="80">
+        <img th:src="${book.image}" alt="표지">
 
-        <div>
+        <div class="book-info">
             <h3 th:text="${book.title}"></h3>
+
             <p><strong>저자:</strong> <span th:text="${book.author}"></span></p>
             <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
 
             <a th:href="${book.link}" target="_blank">상세보기</a>
         </div>
+        <button class="btn btn-outline-primary"
+                onclick="addBook(
+            '[(${book.title})]',
+            '[(${book.author})]',
+            '[(${book.image})]',
+            '[(${book.publisher})]',
+            'TO_READ'
+        )">
+            ⭐ 위시리스트 추가
+        </button>
+
+        <button class="btn btn-outline-success"
+                onclick="addBook(
+            '[(${book.title})]',
+            '[(${book.author})]',
+            '[(${book.image})]',
+            '[(${book.publisher})]',
+            'READING'
+        )">
+            📖 읽기 시작
+        </button>
+
 
     </div>
+
 
 </div>
 
 <th:block layout:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addBook(title, author, image, publisher, status) {
+
+    const data = { title, author, image, publisher };
+
+    fetch(`/memberbook/add?status=${status}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(msg => alert("등록되었습니다!"));
+}
+    </script>
 </th:block>
 
 </html>

@@ -4,10 +4,17 @@ import com.mysite.sbb.book.entity.Book;
 import com.mysite.sbb.member.entity.Member;
 import com.mysite.sbb.memberbook.constant.Status;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class MemberBook {
 
     @Id
@@ -21,10 +28,10 @@ public class MemberBook {
     private Book book;
 
     @Enumerated(EnumType.STRING)
-    private Status status;     // TO_READ, READING, COMPLETED
+    private Status status;      // TO_READ, READING, COMPLETED
 
-    private LocalDate startedDate;     // 읽기 시작 날짜
-    private LocalDate completedDate;   // 읽기 완료 날짜
+    private LocalDate startedDate;
+    private LocalDate completedDate;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

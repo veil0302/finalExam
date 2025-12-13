@@ -2,39 +2,215 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+    <title>리뷰 작성</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
     <style>
-        .fieldError {
-            color: #bd2130;
+        h2 {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* ----- 메인 카드 ----- */
+        .review-container {
+            background: #2a2c34;
+            padding: 40px;
+            border-radius: 22px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+            max-width: 820px;
+            margin: auto;
+        }
+
+        /* ----- 입력창 ----- */
+        .form-control {
+            background: #1f1f25 !important;
+            border: none;
+            color: #fff !important;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            background: #1f1f25;
+            outline: none;
+            box-shadow: 0 0 0 2px #6f6bff;
+        }
+
+        /* ----- 자동완성 박스 (다크 스타일) ----- */
+        .autocomplete-box {
+            position: absolute;
+            background: #2e2f36;
+            border-radius: 12px;
+            width: 100%;
+            z-index: 1000;
+            max-height: 280px;
+            overflow-y: auto;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+        }
+
+        .autocomplete-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            color: #ddd;
+        }
+
+        .autocomplete-item:hover {
+            background: #3a3c46;
+        }
+
+        .autocomplete-item img {
+            width: 42px;
+            height: 58px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        /* ----- 미리보기 카드 ----- */
+        #previewBox .card {
+            background: #1f2026;
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            border: 1px solid #2e2f36;
+        }
+
+        #previewBox img {
+            width: 130px;
+            border-radius: 10px;
+        }
+
+        #previewTitle {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        #previewAuthor {
+            color: #b5b5b5;
+            font-size: 0.9rem;
+        }
+
+        /* ----- 등록 버튼 ----- */
+        .submit-btn {
+            background: #6f6bff;
+            padding: 12px 18px;
+            border-radius: 12px;
+            width: 100%;
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #837fff;
         }
     </style>
 </head>
+
 <body>
-<div class="container my-3">
-    <h2>질문 입력</h2>
-    <form method="post" th:object="${reviewDto}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-        <div class="mb-3">
-            <label for="title" class="form-label"><strong>제목</strong></label>
-            <input th:field="*{title}" type="text" class="form-control" id="title" name="title"
-                   placeholder="제목을 입력하세요">
-            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError"></p>
-        </div>
-        <div class="mb-3">
-            <label for="reviewTitle" class="form-label"><strong>책 제목</strong></label>
-            <input th:field="*{reviewTitle}" type="text" class="form-control" id="reviewTitle" name="reviewTitle"
-                   placeholder="제목을 입력하세요">
-            <p th:if="${#fields.hasErrors('reviewTitle')}" th:errors="*{reviewTitle}" class="fieldError"></p>
-        </div>
-        <div class="mb-3">
-            <label for="reviewContent" class="form-label"><strong>내용</strong></label>
-            <textarea th:field="*{reviewContent}" class="form-control" id="reviewContent" name="reviewContent" rows="8"
-                      placeholder="내용을 입력하세요"></textarea>
-            <p th:if="${#fields.hasErrors('reviewContent')}" th:errors="*{reviewContent}" class="fieldError"></p>
-        </div>
-        <button type="submit" class="btn btn-primary">질문 등록</button>
-    </form>
+
+<div class="container my-5">
+    <div class="review-container">
+
+        <h2 class="mb-4">📚 리뷰 작성</h2>
+
+        <form method="post" th:object="${reviewDto}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <!-- 리뷰 제목 -->
+            <div class="mb-4">
+                <label><strong>리뷰 제목</strong></label>
+                <input th:field="*{reviewTitle}" class="form-control">
+            </div>
+
+            <!-- 책 검색 -->
+            <div class="mb-4" style="position: relative;">
+                <label><strong>책 제목 검색</strong></label>
+                <input th:field="*{bookTitle}" id="bookTitle" class="form-control" autocomplete="off">
+                <div id="searchResult" class="autocomplete-box" style="display:none;"></div>
+            </div>
+
+            <!-- hidden 필드 -->
+            <input type="hidden" th:field="*{bookAuthor}" id="bookAuthor">
+            <input type="hidden" th:field="*{bookImage}" id="bookImage">
+
+            <!-- 미리보기 -->
+            <div id="previewBox" class="mt-4" style="display:none;">
+                <div class="card p-3">
+                    <div class="d-flex gap-3 align-items-center">
+                        <img id="previewImage">
+                        <div>
+                            <h5 id="previewTitle"></h5>
+                            <p id="previewAuthor"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 내용 -->
+            <div class="mt-4 mb-4">
+                <label><strong>내용</strong></label>
+                <textarea th:field="*{reviewContent}" class="form-control" rows="7"></textarea>
+            </div>
+
+            <button class="submit-btn">리뷰 등록</button>
+        </form>
+
+    </div>
 </div>
+
+<script>
+    document.getElementById("bookTitle").addEventListener("keyup", async function () {
+
+        const query = this.value.trim();
+        const box = document.getElementById("searchResult");
+
+        if (query.length < 2) {
+            box.style.display = "none";
+            return;
+        }
+
+        const res = await fetch(`/api/books/search?query=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        box.innerHTML = "";
+        box.style.display = "block";
+
+        data.items.forEach(book => {
+            const item = document.createElement("div");
+            item.className = "autocomplete-item";
+
+            item.innerHTML = `
+                <img src="${book.image}">
+                <div>
+                    <strong>${book.title}</strong><br>
+                    <small>${book.author}</small>
+                </div>
+            `;
+
+            item.onclick = () => {
+                document.getElementById("bookTitle").value = book.title;
+                document.getElementById("bookAuthor").value = book.author;
+                document.getElementById("bookImage").value = book.image;
+
+                document.getElementById("previewImage").src = book.image;
+                document.getElementById("previewTitle").innerText = book.title;
+                document.getElementById("previewAuthor").innerText = book.author;
+                document.getElementById("previewBox").style.display = "block";
+
+                box.style.display = "none";
+            };
+
+            box.appendChild(item);
+        });
+    });
+</script>
+
 </body>
 </html>

@@ -23,13 +23,16 @@ public class Review extends BaseEntity {
     private Long id;
 
     @Column(length = 50, nullable = false)
-    private String title;  // 책 제목
+    private String bookTitle;  // 책 제목
 
     @Column(length = 200, nullable = false)
     private String reviewTitle;  // 리뷰 제목
 
     @Column(nullable = false)
     private String reviewContent; // 리뷰 내용
+
+    private String bookAuthor;
+    private String bookImageUrl;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "review", cascade = CascadeType.ALL)
     private List<ReviewComment> reviewCommentList; // 리뷰 댓글 리스트

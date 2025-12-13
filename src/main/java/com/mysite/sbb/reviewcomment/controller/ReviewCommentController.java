@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/review-comment")
+@RequestMapping("/reviewComment")
 @Slf4j
 @RequiredArgsConstructor
 public class ReviewCommentController {

@@ -74,7 +74,7 @@ public class ReviewController {
         }
 
         ReviewDto dto = new ReviewDto();
-        dto.setTitle(review.getTitle());
+        dto.setBookTitle(review.getBookTitle());
         dto.setReviewTitle(review.getReviewTitle());
         dto.setReviewContent(review.getReviewContent());
 

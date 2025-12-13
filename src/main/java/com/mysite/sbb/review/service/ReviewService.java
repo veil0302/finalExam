@@ -39,9 +39,11 @@ public class ReviewService {
     /* 리뷰 생성 */
     public void create(ReviewDto reviewDto, Member member) {
         Review review = Review.builder()
-                .title(reviewDto.getTitle())               // 책 제목
+                .bookTitle(reviewDto.getBookTitle())      // 책 제목
                 .reviewTitle(reviewDto.getReviewTitle())   // 리뷰 제목
                 .reviewContent(reviewDto.getReviewContent()) // 리뷰 내용
+                .bookAuthor(reviewDto.getBookAuthor())
+                .bookImageUrl(reviewDto.getBookImage())
                 .author(member)
                 .build();
 
@@ -50,7 +52,7 @@ public class ReviewService {
 
     /* 리뷰 수정 */
     public void modify(Review review, @Valid ReviewDto reviewDto) {
-        review.setTitle(reviewDto.getTitle());
+        review.setBookTitle(reviewDto.getBookTitle());
         review.setReviewTitle(reviewDto.getReviewTitle());
         review.setReviewContent(reviewDto.getReviewContent());
         reviewRepository.save(review);
