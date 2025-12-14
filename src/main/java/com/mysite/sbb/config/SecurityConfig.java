@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/member/**").permitAll()
-                .requestMatchers("/mypage/**").permitAll()
+                .requestMatchers("/mypage").authenticated()
                 .requestMatchers("/book/**").permitAll()
                 .requestMatchers("/api/books/**").permitAll() // 네이버 도서 검색 api를 시큐리티에 추가 해줌
 

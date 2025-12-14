@@ -36,17 +36,31 @@ public class MemberBookController {
 
         Member member = memberService.getMember(principal.getName());
 
+        // card부분 총 개수량 적을 때 사용
         model.addAttribute("toReadList",
                 memberBookService.getBooks(member, Status.TO_READ));
-
         model.addAttribute("readingList",
                 memberBookService.getBooks(member, Status.READING));
-
         model.addAttribute("completedList",
                 memberBookService.getBooks(member, Status.COMPLETED));
 
+        // chart.js - data부분에 값 넣어주는
+        int thisYear = LocalDate.now().getYear();
+        int lastYear = thisYear - 1;
+
+        model.addAttribute("thisYear", thisYear); // current year
+        model.addAttribute("lastYear", lastYear); // last year
+
+        model.addAttribute("thisYearCounts",
+                memberBookService.getMonthlyCompletedCounts(member, thisYear));
+
+        model.addAttribute("lastYearCounts",
+                memberBookService.getMonthlyCompletedCounts(member, lastYear));
+
         return "/mypage/mypage";
     }
+
+
 
     @GetMapping("/to-read")
     public String toRead(Model model, Principal principal) {
@@ -95,7 +109,6 @@ public class MemberBookController {
         memberBookService.completeReading(id, completedDate);
         return "redirect:/reading";
     }
-
 
 
 }

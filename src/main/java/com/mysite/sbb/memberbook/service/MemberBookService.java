@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,6 +79,27 @@ public class MemberBookService {
         mb.setCompletedDate(completedDate);
 
         memberBookRepository.save(mb);
+    }
+
+    /* 완독한 책 월 수(?) 계산 */
+    public List<Integer> getMonthlyCompletedCounts(Member member, int year) {
+
+        List<Integer> counts = new ArrayList<>(Collections.nCopies(12, 0));
+
+        List<MemberBook> completedList =
+                memberBookRepository.findByMemberAndStatus(member, Status.COMPLETED);
+
+        for (MemberBook mb : completedList) {
+
+            if (mb.getCompletedDate() == null) continue;
+
+            if (mb.getCompletedDate().getYear() != year) continue;
+
+            int month = mb.getCompletedDate().getMonthValue(); // 1~12
+            counts.set(month - 1, counts.get(month - 1) + 1);
+        }
+
+        return counts;
     }
 
 

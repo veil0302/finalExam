@@ -109,22 +109,22 @@
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
 
-        <button class="btn btn-outline-primary" type="button"
+        <button class="btn btn-primary" type="button"
                 th:data-title="${book.title}"
                 th:data-author="${book.author}"
                 th:data-image="${book.image}"
                 th:data-publisher="${book.publisher}"
                 onclick="addBook(this, 'TO_READ')">
-            ⭐ 위시리스트 추가
+            <i class="bi bi-bookmark-plus-fill"></i> 읽을 예정 추가
         </button>
 
-        <button class="btn btn-outline-success" type="button"
+        <button class="btn btn-primary" type="button"
                 th:data-title="${book.title}"
                 th:data-author="${book.author}"
                 th:data-image="${book.image}"
                 th:data-publisher="${book.publisher}"
                 onclick="addBook(this, 'READING')">
-            📖 읽기 시작
+            <i class="bi bi-bookmark-check-fill"></i> 지금 바로 읽기
         </button>
 
 

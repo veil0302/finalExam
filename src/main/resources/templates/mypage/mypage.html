@@ -34,7 +34,7 @@
             </div>
 
             <div class="card-dark">
-                <h5 class="section-title"><i class="bi bi-graph-up"></i> 평균 독서량 비교</h5>
+                <h5 class="section-title"><i class="bi bi-graph-up"></i>작년 독서량 비교</h5>
                 <canvas id="compareChart"></canvas>
             </div>
         </div>
@@ -56,99 +56,109 @@
         <div class="col-md-4">
             <div class="book-card" onclick="location.href='/to-read'">
                 <h5 class="fw-bold">📕 읽을 예정</h5>
-                <p class="category-label">총 5권</p>
-            </div>
+                <p class="category-label">
+                    총 <span th:text="${#lists.size(toReadList)}"></span>권
+                </p></div>
         </div>
 
         <!-- 읽는 중 -->
         <div class="col-md-4">
             <div class="book-card" onclick="location.href='/reading'">
                 <h5 class="fw-bold">📘 읽는 중</h5>
-                <p class="category-label">총 3권</p>
+                <p class="category-label">
+                    총 <span th:text="${#lists.size(readingList)}"></span>권
+                </p>
             </div>
         </div>
 
         <div class="col-md-4">
             <div class="book-card" onclick="location.href='/completed'">
                 <h5 class="fw-bold">📗 완독</h5>
-                <p class="category-label">총 12권</p>
+                <p class="category-label">
+                    총 <span th:text="${#lists.size(completedList)}"></span>권
+                </p>
             </div>
         </div>
-
     </div>
 </div>
-
+<!---->
+<div id="thisYearCounts"
+     th:data-values="${#strings.arrayJoin(thisYearCounts, ',')}">
+</div>
+<div id="lastYearCounts"
+     th:data-values="${#strings.arrayJoin(lastYearCounts, ',')}">
+</div>
 
 <!-- Chart.js 스크립트 -->
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        // 올해 읽은 책 (BAR)
-        new Chart(document.getElementById("yearChart"), {
+        const thisYearCounts = [[${thisYearCounts}]];
+        const lastYearCounts = [[${lastYearCounts}]];
+
+    console.log(thisYearCounts);
+    console.log(lastYearCounts);
+
+    new Chart(document.getElementById("yearChart"), {
         type: "bar",
         data: {
-        labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
-        datasets: [{
-        label: "읽은 책 수",
-        data: [2, 1, 3, 2, 5, 3],
-        backgroundColor: "#6c63ff"
-        }]
-        },
-        options: {
-        scales: {
-        y: { ticks: { color: "#fff" } },
-        x: { ticks: { color: "#fff" } }
-        },
-        plugins: { legend: { labels: { color: "#fff" } } }
+            labels: ["1월","2월","3월","4월","5월","6월",
+                     "7월","8월","9월","10월","11월","12월"],
+            datasets: [{
+                label: "완독한 책 수",
+                data: thisYearCounts,
+                backgroundColor: "#6c63ff"
+            }]
         }
-        });
+    });
 
 
-        // 평균 독서량 vs 나의 독서량 (LINE CHART)
-        new Chart(document.getElementById("compareChart"), {
-        type: "line",
-        data: {
-        labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
-        datasets: [
-        {
-        label: "나의 독서량",
-        data: [2, 1, 3, 2, 5, 3],
-        borderColor: "#6c63ff",
-        backgroundColor: "rgba(108,99,255,0.3)",
-        borderWidth: 2,
-        tension: 0.3
-        },
-        {
-        label: "평균 독서량",
-        data: [1, 1.2, 1.5, 1, 2, 1.8],
-        borderColor: "#f38b4a",
-        backgroundColor: "rgba(243,139,74,0.3)",
-        borderWidth: 2,
-        tension: 0.3
-        }
-        ]
-        },
-        options: {
-        scales: {
-        y: { ticks: { color: "#fff" } },
-        x: { ticks: { color: "#fff" } }
-        },
-        plugins: { legend: { labels: { color: "#fff" } } }
-        }
-        });
+            // 평균 독서량 vs 나의 독서량 (LINE CHART)
+            new Chart(document.getElementById("compareChart"), {
+            type: "line",
+            data: {
+            labels: ["1월","2월","3월","4월","5월","6월",
+                     "7월","8월","9월","10월","11월","12월"],
+            datasets: [
+            {
+            label: [[${thisYear}]] + "년",
+            data: thisYearCounts,
+            borderColor: "#6c63ff",
+            backgroundColor: "rgba(108,99,255,0.3)",
+            borderWidth: 2,
+            tension: 0.3
+            },
+            {
+            label: [[${lastYear}]] + "년",
+            data: lastYearCounts,
+            borderColor: "#f38b4a",
+            backgroundColor: "rgba(243,139,74,0.3)",
+            borderWidth: 2,
+            tension: 0.3
+            }
+            ]
+            },
+            options: {
+            scales: {
+            y: { ticks: { color: "#fff" } },
+            x: { ticks: { color: "#fff" } }
+            },
+            plugins: { legend: { labels: { color: "#fff" } } }
+            }
+            });
 
 
-        // 카테고리별 독서량 (DONUT)
-        new Chart(document.getElementById("categoryChart"), {
-        type: "doughnut",
-        data: {
-        labels: ["문학", "인문", "경제", "자기계발"],
-        datasets: [{
-        data: [5, 3, 2, 4],
-        backgroundColor: ["#6c63ff", "#f38b4a", "#4ac0c0", "#ffcd56"]
-        }]
-        }
-        });
+            // 카테고리별 독서량 (DONUT)
+            new Chart(document.getElementById("categoryChart"), {
+            type: "doughnut",
+            data: {
+            labels: ["문학", "인문", "경제", "자기계발"],
+            datasets: [{
+            data: [5, 3, 2, 4],
+            backgroundColor: ["#6c63ff", "#f38b4a", "#4ac0c0", "#ffcd56"]
+            }]
+            }
+            });
     </script>
 </th:block>
 </body>
