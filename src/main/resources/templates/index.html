@@ -103,25 +103,27 @@
 
             <a th:href="${book.link}" target="_blank">상세보기</a>
         </div>
-        <button class="btn btn-outline-primary"
-                onclick="addBook(
-            '[(${book.title})]',
-            '[(${book.author})]',
-            '[(${book.image})]',
-            '[(${book.publisher})]',
-            'TO_READ'
-        )">
+
+
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+
+        <button class="btn btn-outline-primary" type="button"
+                th:data-title="${book.title}"
+                th:data-author="${book.author}"
+                th:data-image="${book.image}"
+                th:data-publisher="${book.publisher}"
+                onclick="addBook(this, 'TO_READ')">
             ⭐ 위시리스트 추가
         </button>
 
-        <button class="btn btn-outline-success"
-                onclick="addBook(
-            '[(${book.title})]',
-            '[(${book.author})]',
-            '[(${book.image})]',
-            '[(${book.publisher})]',
-            'READING'
-        )">
+        <button class="btn btn-outline-success" type="button"
+                th:data-title="${book.title}"
+                th:data-author="${book.author}"
+                th:data-image="${book.image}"
+                th:data-publisher="${book.publisher}"
+                onclick="addBook(this, 'READING')">
             📖 읽기 시작
         </button>
 
@@ -134,18 +136,33 @@
 <th:block layout:fragment="script">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function addBook(title, author, image, publisher, status) {
+        function addBook(btn, status) {
 
-    const data = { title, author, image, publisher };
+               const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+               const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
-    fetch(`/memberbook/add?status=${status}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.text())
-    .then(msg => alert("등록되었습니다!"));
-}
+               const data = {
+                   title: btn.dataset.title,
+                   author: btn.dataset.author,
+                   image: btn.dataset.image,
+                   publisher: btn.dataset.publisher
+               };
+
+               fetch(`/memberbook/add?status=${status}`, {
+                   method: "POST",
+                   headers: {
+                       "Content-Type": "application/json",
+                       [csrfHeader]: csrfToken
+                   },
+                   body: JSON.stringify(data)
+               })
+               .then(res => {
+                   if (!res.ok) throw new Error("HTTP " + res.status);
+                   return res.text();
+               })
+               .then(() => alert("등록되었습니다!"))
+               .catch(err => alert("실패: " + err.message));
+           }
     </script>
 </th:block>
 

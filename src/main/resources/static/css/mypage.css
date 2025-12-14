@@ -1,0 +1,163 @@
+/* =========================
+   🎨 MyPage Theme Variables
+========================= */
+:root {
+    --bg-dark: #2b2b2f;
+    --bg-card: #3a3a40;
+    --bg-hover: #47474e;
+
+    --text-light: #f2f2f2;
+    --text-muted: #bdbdbd;
+
+    --accent: #6c63ff !important;
+    --accent-hover: #5b54e0 !important;
+    --accent-warm: #f38b4a;
+
+    --radius: 12px;
+    --border: #404046;
+}
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+
+
+/* =========================
+   🌙 Page Base
+========================= */
+.mypage {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    font-family: "Noto Sans KR", sans-serif;
+    min-height: 100vh;
+}
+
+/* =========================
+   🧭 Section Titles
+========================= */
+.mypage-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* =========================
+   📦 Card Layout
+========================= */
+.card-dark {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+}
+
+/* =========================
+   📊 Chart Wrapper
+========================= */
+.chart-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    height: 100%;
+}
+
+/* =========================
+   📚 Book Status Cards
+========================= */
+.book-status-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.book-status-card:hover {
+    background: var(--bg-hover);
+}
+
+.book-status-card h5 {
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.book-status-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* =========================
+   📖 Book Grid Card
+========================= */
+.book-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 1rem;
+    transition: 0.2s;
+}
+
+.book-card:hover {
+    background: var(--bg-hover);
+}
+
+.book-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.book-card h6 {
+    margin-top: 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* =========================
+   🏷 Meta Text
+========================= */
+.text-muted-sm {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+
+
+/* =========================
+   📖 Reading Page Only
+========================= */
+
+.reading-item {
+    min-height: 110px;
+}
+
+.reading-book-img {
+    width: 70px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.reading-date {
+    background: #2f2f34;
+    color: var(--text-light);
+    border: 1px solid var(--border);
+}
+
+.reading-date:focus {
+    background: #2f2f34;
+    color: var(--text-light);
+    border-color: var(--accent);
+}

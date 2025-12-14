@@ -28,14 +28,20 @@ public class SecurityConfig {
 
         http.logout(Customizer.withDefaults());
 
-        //http.csrf(csrf -> csrf.disable());
+//        http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/member/**").permitAll()
-                .requestMatchers("/question/**").permitAll()
+                .requestMatchers("/mypage/**").permitAll()
+                .requestMatchers("/book/**").permitAll()
                 .requestMatchers("/api/books/**").permitAll() // 네이버 도서 검색 api를 시큐리티에 추가 해줌
+
+                .requestMatchers("/memberbook/**").permitAll()
+                .requestMatchers("/reviewcomment/**").permitAll()
+                .requestMatchers("/review/**").permitAll()
+
                 .anyRequest().authenticated());
 
         return http.build();

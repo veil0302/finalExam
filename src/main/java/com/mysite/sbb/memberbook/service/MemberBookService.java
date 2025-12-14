@@ -54,4 +54,30 @@ public class MemberBookService {
     public List<MemberBook> getBooks(Member member, Status status) {
         return memberBookRepository.findByMemberAndStatus(member, status);
     }
+
+    /* memberbook Status 값 변경 */
+
+    public void startReading(Long memberBookId, LocalDate startedDate) {
+
+        MemberBook mb = memberBookRepository.findById(memberBookId)
+                .orElseThrow(() -> new IllegalArgumentException("책 없음"));
+
+        mb.setStatus(Status.READING);
+        mb.setStartedDate(startedDate);
+
+        memberBookRepository.save(mb);
+    }
+
+    public void completeReading(Long memberBookId, LocalDate completedDate) {
+
+        MemberBook mb = memberBookRepository.findById(memberBookId)
+                .orElseThrow(() -> new IllegalArgumentException("책 없음"));
+
+        mb.setStatus(Status.COMPLETED);
+        mb.setCompletedDate(completedDate);
+
+        memberBookRepository.save(mb);
+    }
+
+
 }
