@@ -105,20 +105,18 @@ public class MemberBookService {
         int startedCount = 0;
         int completedCount = 0;
 
-        List<MemberBook> list =
-                memberBookRepository.findByMember(member);
+        List<MemberBook> list = memberBookRepository.findByMember(member);
 
         for (MemberBook mb : list) {
 
             if (mb.getStartedDate() == null) continue;
             if (mb.getStartedDate().getYear() != year) continue;
-            startedCount++;
+//            startedCount++;
 
             if (mb.getCompletedDate() != null) {
                 completedCount++;
             }
         }
-
         Map<String, Integer> result = new HashMap<>();
         result.put("started", startedCount);
         result.put("completed", completedCount);
