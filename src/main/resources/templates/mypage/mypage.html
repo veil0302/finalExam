@@ -47,7 +47,7 @@
                     <canvas id="conversionChart"></canvas>
 
                     <div class="conversion-center">
-                        <strong class="conversion-percent">
+                        <strong th:if="${#lists.size(readingList) + #lists.size(completedList) > 0}" class="conversion-percent">
                             [[${( (#lists.size(completedList) * 100) /
                             (#lists.size(readingList) + #lists.size(completedList)) )}]]%
                         </strong>
@@ -58,7 +58,6 @@
             </div>
 
             <div class="card-dark mb-4 equal-card">
-
                 <h5 class="section-title">
                     <i class="bi bi-clock-history"></i>
                     평균 완독 소요 시간

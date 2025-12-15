@@ -48,7 +48,7 @@ public class MemberBookController {
         model.addAttribute("completedList",
                 memberBookService.getBooks(member, Status.COMPLETED));
 
-        // chart.js에서 독서량 ㅁ나
+        // chart.js에서 독서량
         model.addAttribute("thisYearCounts",
                 memberBookService.getMonthlyCompletedCounts(member, thisYear));
         model.addAttribute("lastYearCounts",
@@ -64,9 +64,8 @@ public class MemberBookController {
         model.addAttribute("thisYear", thisYear);
         model.addAttribute("lastYear", lastYear);
 
-        //완독 소요시간 평규 ㄴ
+        //완독 소요시간 평균
         double avgReadDays = memberBookService.getAverageReadDays(member);
-
         model.addAttribute("avgReadDays", avgReadDays);
 
         return "/mypage/mypage";
