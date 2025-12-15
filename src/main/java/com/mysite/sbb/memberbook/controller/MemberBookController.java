@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,7 +37,10 @@ public class MemberBookController {
 
         Member member = memberService.getMember(principal.getName());
 
-        // card부분 총 개수량 적을 때 사용
+        int thisYear = LocalDate.now().getYear();
+        int lastYear = thisYear - 1;
+
+        // card부분에만 넣어줄 것들
         model.addAttribute("toReadList",
                 memberBookService.getBooks(member, Status.TO_READ));
         model.addAttribute("readingList",
@@ -44,18 +48,26 @@ public class MemberBookController {
         model.addAttribute("completedList",
                 memberBookService.getBooks(member, Status.COMPLETED));
 
-        // chart.js - data부분에 값 넣어주는
-        int thisYear = LocalDate.now().getYear();
-        int lastYear = thisYear - 1;
-
-        model.addAttribute("thisYear", thisYear); // current year
-        model.addAttribute("lastYear", lastYear); // last year
-
+        // chart.js에서 독서량 ㅁ나
         model.addAttribute("thisYearCounts",
                 memberBookService.getMonthlyCompletedCounts(member, thisYear));
-
         model.addAttribute("lastYearCounts",
                 memberBookService.getMonthlyCompletedCounts(member, lastYear));
+
+        // chart.js에서 올해 완독률
+        Map<String, Integer> conversion =
+                memberBookService.getReadingConversion(member, thisYear);
+
+        model.addAttribute("startedCount", conversion.get("started"));
+        model.addAttribute("completedCount", conversion.get("completed"));
+
+        model.addAttribute("thisYear", thisYear);
+        model.addAttribute("lastYear", lastYear);
+
+        //완독 소요시간 평규 ㄴ
+        double avgReadDays = memberBookService.getAverageReadDays(member);
+
+        model.addAttribute("avgReadDays", avgReadDays);
 
         return "/mypage/mypage";
     }

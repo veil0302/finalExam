@@ -26,47 +26,45 @@
     <!-- 페이지 제목 -->
     <h1 class="text-center mb-5 fw-bold">네이버 도서 검색</h1>
 
-    <div th:if="${recommendBooks != null and !#lists.isEmpty(recommendBooks)}">
+    <h3 class="mb-3 fw-semibold">추천 도서</h3>
 
-        <h3 class="mb-3 fw-semibold">추천 도서</h3>
+    <div id="recommendedBooks"
+         class="carousel slide mb-5"
+         data-bs-ride="carousel">
 
-        <div id="recommendedBooks"
-             class="carousel slide mb-5"
-             data-bs-ride="carousel">
+        <div class="carousel-inner">
 
-            <div class="carousel-inner">
+            <!-- 추천 도서 리스트 -->
+            <div th:each="book, stat : ${recommendBooks}"
+                 class="carousel-item"
+                 th:classappend="${stat.index == 0} ? ' active' : ''">
 
-                <div th:each="book, stat : ${recommendBooks}"
-                     class="carousel-item"
-                     th:classappend="${stat.index == 0} ? ' active' : ''">
+                <img th:src="${book.imageUrl}"
+                     class="d-block w-100"
+                     alt="추천 도서 이미지">
 
-                    <img th:src="${book.imageUrl}"
-                         class="d-block w-100"
-                         alt="추천 도서 이미지">
-
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5 th:text="${book.title}">책 제목</h5>
-                        <p th:text="${book.author}">저자</p>
-                    </div>
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 th:text="${book.title}">책 제목</h5>
+                    <p th:text="${book.author}">저자</p>
                 </div>
-
             </div>
 
-            <button class="carousel-control-prev"
-                    type="button"
-                    data-bs-target="#recommendedBooks"
-                    data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-
-            <button class="carousel-control-next"
-                    type="button"
-                    data-bs-target="#recommendedBooks"
-                    data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-
         </div>
+
+        <!-- 캐러셀 버튼 -->
+        <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#recommendedBooks"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#recommendedBooks"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
 
     </div>
 

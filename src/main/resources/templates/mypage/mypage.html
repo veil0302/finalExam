@@ -5,9 +5,6 @@
       layout:decorate="~{layouts/layout}">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
     <!-- mypage 전용 css -->
     <link rel="stylesheet" th:href="@{/css/mypage.css}">
 
@@ -15,7 +12,6 @@
 
 </head>
 
-<body>
 <div layout:fragment="content" class="container my-5">
 
 
@@ -27,23 +23,58 @@
 
         <div class="col-lg-6">
 
-            <div class="card-dark mb-4">
+            <div class="card-dark mb-4 equal-card">
                 <h5 class="section-title"><i class="bi bi-bar-chart-line"></i>
                     올해 읽은 책</h5>
                 <canvas id="yearChart"></canvas>
             </div>
 
-            <div class="card-dark">
+            <div class="card-dark equal-card">
                 <h5 class="section-title"><i class="bi bi-graph-up"></i>작년 독서량 비교</h5>
                 <canvas id="compareChart"></canvas>
             </div>
         </div>
 
         <div class="col-lg-6">
-            <div class="card-dark h-100">
-                <h5 class="section-title"><i class="bi bi-pie-chart"></i>
-                    카테고리별 독서량</h5>
-                <canvas id="categoryChart"></canvas>
+            <div class="card-dark mb-4 equal-card">
+
+                <h5 class="section-title">
+                    <i class="bi bi-pie-chart"></i>
+                    독서 전환율 (올해)
+                </h5>
+
+                <div class="conversion-wrapper">
+                    <canvas id="conversionChart"></canvas>
+
+                    <div class="conversion-center">
+                        <strong class="conversion-percent">
+                            [[${( (#lists.size(completedList) * 100) /
+                            (#lists.size(readingList) + #lists.size(completedList)) )}]]%
+                        </strong>
+                        <div class="text-muted-sm">완독 달성률</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-dark mb-4 equal-card">
+
+                <h5 class="section-title">
+                    <i class="bi bi-clock-history"></i>
+                    평균 완독 소요 시간
+                </h5>
+
+                <div class="avg-read-content">
+                    <div class="avg-read-value">
+                        <span th:text="${#numbers.formatDecimal(avgReadDays, 1, 1)}"></span>
+                        <span class="avg-read-unit">일</span>
+                    </div>
+
+                    <div class="avg-read-desc">
+                        완독 기준 평균 독서 기간
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -54,39 +85,58 @@
 
         <!-- 읽을 예정 -->
         <div class="col-md-4">
-            <div class="book-card" onclick="location.href='/to-read'">
-                <h5 class="fw-bold">📕 읽을 예정</h5>
-                <p class="category-label">
-                    총 <span th:text="${#lists.size(toReadList)}"></span>권
-                </p></div>
+            <div class="book-status-card" onclick="location.href='/to-read'">
+                <h5>📕 읽을 예정</h5>
+
+                <div class="status-count">
+                <span class="count-number"
+                      th:text="${#lists.size(toReadList)}"></span>
+                    <span class="count-label">권</span>
+                </div>
+            </div>
         </div>
 
         <!-- 읽는 중 -->
         <div class="col-md-4">
-            <div class="book-card" onclick="location.href='/reading'">
-                <h5 class="fw-bold">📘 읽는 중</h5>
-                <p class="category-label">
-                    총 <span th:text="${#lists.size(readingList)}"></span>권
-                </p>
+            <div class="book-status-card" onclick="location.href='/reading'">
+                <h5>📘 읽는 중</h5>
+
+                <div class="status-count">
+                <span class="count-number"
+                      th:text="${#lists.size(readingList)}"></span>
+                    <span class="count-label">권</span>
+                </div>
             </div>
         </div>
 
+        <!-- 완독 -->
         <div class="col-md-4">
-            <div class="book-card" onclick="location.href='/completed'">
-                <h5 class="fw-bold">📗 완독</h5>
-                <p class="category-label">
-                    총 <span th:text="${#lists.size(completedList)}"></span>권
-                </p>
+            <div class="book-status-card" onclick="location.href='/completed'">
+                <h5>📗 완독</h5>
+
+                <div class="status-count">
+                <span class="count-number"
+                      th:text="${#lists.size(completedList)}"></span>
+                    <span class="count-label">권</span>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <!---->
 <div id="thisYearCounts"
      th:data-values="${#strings.arrayJoin(thisYearCounts, ',')}">
 </div>
 <div id="lastYearCounts"
      th:data-values="${#strings.arrayJoin(lastYearCounts, ',')}">
+</div>
+<div id="startedCount"
+     th:data-values="${startedCount}">
+</div>
+<div id="completedCount"
+     th:data-values="${completedCount}">
 </div>
 
 <!-- Chart.js 스크립트 -->
@@ -113,7 +163,6 @@
     });
 
 
-            // 평균 독서량 vs 나의 독서량 (LINE CHART)
             new Chart(document.getElementById("compareChart"), {
             type: "line",
             data: {
@@ -148,19 +197,53 @@
             });
 
 
-            // 카테고리별 독서량 (DONUT)
-            new Chart(document.getElementById("categoryChart"), {
-            type: "doughnut",
-            data: {
-            labels: ["문학", "인문", "경제", "자기계발"],
+
+const readingCount = [[${#lists.size(readingList)}]];
+const completedCount = [[${#lists.size(completedList)}]];
+
+const totalRead = readingCount + completedCount;
+
+// 읽은 책이 0권이면 차트 의미 없음
+if (totalRead > 0) {
+
+    const completedPercent = Math.round(
+        (completedCount / totalRead) * 100
+    );
+
+    new Chart(document.getElementById("conversionChart"), {
+        type: "doughnut",
+        data: {
+            labels: ["완독", "읽는 중"],
             datasets: [{
-            data: [5, 3, 2, 4],
-            backgroundColor: ["#6c63ff", "#f38b4a", "#4ac0c0", "#ffcd56"]
+                data: [completedPercent, 100 - completedPercent],
+                backgroundColor: [
+                    "#86db7a",   // 완독
+                    "#6c63ff"    // 읽는 중
+                ],
+                borderWidth: 0
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+             width: 400,
+             height: 400,
+            cutout: "70%",
+            plugins: {
+                legend: {
+                    labels: { color: "#fff" }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + " : " + context.raw + "%";
+                        }
+                    }
+                }
             }
-            });
+        }
+    });
+}
     </script>
 </th:block>
-</body>
-
 </html>

@@ -93,13 +93,13 @@
         }
 
         .btn-primary {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
         }
 
         .btn-primary:hover {
-            background: var(--accent-hover);
-            border-color: var(--accent-hover);
+            background: var(--accent-hover) !important;
+            border-color: var(--accent-hover) !important;
         }
         .btn-back {
                     margin-top: 15px;
@@ -113,6 +113,15 @@
                 .btn-back:hover {
                     color: #fff;
                 }
+        .book-info {
+            flex: 1;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
 
 
 .footer {
@@ -126,3 +135,220 @@
 }
 
 
+#recommendedBooks .carousel-item {
+    text-align: center;
+}
+
+#recommendedBooks .carousel-item img {
+    width: auto;              /* ❗ 가로 늘림 금지 */
+    height: 320px;            /* 책 표지 기준 높이 */
+    max-width: 220px;         /* 너무 커지지 않게 */
+    object-fit: contain;      /* 비율 유지 */
+    background: #fff;         /* 흰 여백 */
+    padding: 8px;
+    border-radius: 10px;
+    margin: 0 auto;           /* 가운데 정렬 */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+#recommendedBooks .carousel-caption {
+    position: static;              /* 이미지 위에서 분리 */
+    background: none;
+    padding: 12px 0 0;
+    margin-top: 10px;
+    color: var(--text-light);
+    text-align: center;
+}
+#recommendedBooks .carousel-caption h5 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text-light);
+}
+
+#recommendedBooks .carousel-caption p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* =========================
+   📕 Large Book Header
+========================= */
+
+.article-book-lg {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 3rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.article-book-lg img {
+    width: 150px;          /* 🔥 기존보다 크게 */
+    height: 220px;
+    object-fit: contain;
+    background: #fff;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.book-meta-lg {
+    text-align: center;
+}
+
+.book-meta-lg h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.book-meta-lg p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+.review-article {
+    max-width: 760px;
+}
+
+/* 제목 */
+.article-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+/* 책 정보 */
+.article-book {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2.5rem;
+}
+
+.article-book img {
+    width: 110px;
+    height: 160px;
+    object-fit: contain;
+    background: #fff;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.book-meta {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.book-meta span {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* 본문 */
+.article-body {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    margin-bottom: 2.5rem;
+}
+
+/* 작성자 정보 */
+.article-footer {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* 수정/삭제 */
+.article-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 3rem;
+}
+
+/* 댓글 */
+.comment-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.comment-item {
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 0;
+}
+
+.comment-content {
+    font-size: 0.95rem;
+}
+
+.comment-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+}
+
+.comment-actions {
+    text-align: right;
+    font-size: 0.75rem;
+}
+
+.comment-actions a {
+    margin-left: 8px;
+    color: var(--accent);
+}
+
+/* 댓글 입력 */
+.comment-form {
+    margin-top: 2rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-light);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+/* =========================
+   ✂ Article Divider
+========================= */
+
+.article-divider {
+    position: relative;
+    margin: 3.5rem 0 1.8rem;
+    text-align: center;
+}
+
+.article-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+}
+
+.article-divider span {
+    position: relative;
+    background: var(--bg-dark);
+    padding: 0 14px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+.equal-card {
+    height: 360px !important;       /* 🔥 이 값만 조절 */
+    display: flex;
+    flex-direction: column;
+}

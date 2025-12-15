@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +56,6 @@ public class MemberBookService {
     }
 
     /* memberbook Status 값 변경 */
-
     public void startReading(Long memberBookId, LocalDate startedDate) {
 
         MemberBook mb = memberBookRepository.findById(memberBookId)
@@ -95,12 +92,70 @@ public class MemberBookService {
 
             if (mb.getCompletedDate().getYear() != year) continue;
 
-            int month = mb.getCompletedDate().getMonthValue(); // 1~12
+            int month = mb.getCompletedDate().getMonthValue();
             counts.set(month - 1, counts.get(month - 1) + 1);
         }
 
         return counts;
     }
+
+    /* 올해 읽기 시작 > 완독 전환 수 계산  */
+    public Map<String, Integer> getReadingConversion(Member member, int year) {
+
+        int startedCount = 0;
+        int completedCount = 0;
+
+        List<MemberBook> list =
+                memberBookRepository.findByMember(member);
+
+        for (MemberBook mb : list) {
+
+            if (mb.getStartedDate() == null) continue;
+            if (mb.getStartedDate().getYear() != year) continue;
+            startedCount++;
+
+            if (mb.getCompletedDate() != null) {
+                completedCount++;
+            }
+        }
+
+        Map<String, Integer> result = new HashMap<>();
+        result.put("started", startedCount);
+        result.put("completed", completedCount);
+
+        return result;
+    }
+
+    //완독 기준 소요시간 평균 계산
+    public double getAverageReadDays(Member member) {
+
+        List<MemberBook> completedList =
+                memberBookRepository.findByMemberAndStatus(member, Status.COMPLETED);
+
+        if (completedList.isEmpty()) {
+            return 0;
+        }
+
+        long totalDays = 0;
+        int count = 0;
+
+        for (MemberBook mb : completedList) {
+
+            if (mb.getStartedDate() == null || mb.getCompletedDate() == null)
+                continue;
+
+            long days = java.time.temporal.ChronoUnit.DAYS.between(
+                    mb.getStartedDate(),
+                    mb.getCompletedDate()
+            ) + 1;
+
+            totalDays += days;
+            count++;
+        }
+
+        return count == 0 ? 0 : (double) totalDays / count;
+    }
+
 
 
 }

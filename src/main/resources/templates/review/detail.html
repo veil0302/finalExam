@@ -4,147 +4,111 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout}">
 
-<div layout:fragment="content" class="container my-4">
+<div layout:fragment="content" class="container my-5 review-article">
 
-    <!-- -------------------------------
-         리뷰 제목
-    -------------------------------- -->
-    <h2 class="border-bottom pb-2" th:text="${review.reviewTitle}">리뷰 제목</h2>
+    <!-- =========================
+         📝 게시글 제목
+    ========================= -->
+    <h1 class="article-title"
+        th:text="${review.reviewTitle}">
+        리뷰 제목
+    </h1>
 
-    <!-- -------------------------------
-         책 정보 (네이버 API에서 선택한 값)
-    -------------------------------- -->
-    <div class="card mb-3 shadow-sm" style="max-width: 500px;"
+    <!-- =========================
+         📕 책 정보 (확대 버전)
+    ========================= -->
+    <div class="article-book-lg"
          th:if="${review.bookTitle != null}">
-        <div class="card-body d-flex gap-3 align-items-center">
 
-            <img th:src="${review.bookImageUrl}"
-                 alt="책 이미지"
-                 style="width: 90px; height: 120px; object-fit: cover; border-radius: 6px;">
+        <img th:src="${review.bookImageUrl}" alt="책 표지">
 
-            <div>
-                <h5 class="mb-1" th:text="${review.bookTitle}">책 제목</h5>
-                <p class="text-muted mb-0" th:text="'저자: ' + ${review.bookAuthor}"></p>
-            </div>
+        <div class="book-meta-lg">
+            <h3 th:text="${review.bookTitle}">책 제목</h3>
+            <p th:text="${review.bookAuthor}">저자</p>
         </div>
     </div>
+    <!-- =========================
+         📄 본문 (크게)
+    ========================= -->
+    <div class="article-body">
+        <p th:text="${review.reviewContent}"></p>
+    </div>
 
-    <!-- -------------------------------
-         리뷰 본문
-    -------------------------------- -->
-    <div class="card bg-light">
-        <div class="card-body">
+    <!-- 작성자 / 날짜 -->
+    <div class="article-footer">
+        <span th:text="${review.author.username}"></span>
+        ·
+        <span th:text="${#temporals.format(review.created,'yyyy-MM-dd HH:mm')}"></span>
+    </div>
 
-            <p class="card-text" th:text="${review.reviewContent}"></p>
-
-            <!-- 작성자 정보 -->
-            <div class="d-flex justify-content-end mt-4">
-                <div class="badge bg-primary text-white p-2">
-                    <div>
-                        <span th:text="${review.author.username}"></span>
-                    </div>
-                    <div th:text="${#temporals.format(review.created,'yyyy-MM-dd HH:mm')}"></div>
-                </div>
-            </div>
-
-            <!-- 수정 / 삭제 -->
-            <div class="mt-3">
-                <a th:href="@{|/review/modify/${review.id}|}"
-                   class="btn btn-sm btn-outline-primary"
-                   sec:authorize="isAuthenticated()"
-                   th:if="${review.author != null and #authentication.getPrincipal().username == review.author.username}">
-                    수정
-                </a>
-
-                <a href="javascript:void(0)"
-                   th:data-uri="@{|/review/delete/${review.id}|}"
-                   class="delete btn btn-sm btn-outline-danger"
-                   sec:authorize="isAuthenticated()"
-                   th:if="${review.author != null and #authentication.getPrincipal().username == review.author.username}">
-                    삭제
-                </a>
-            </div>
-
-        </div>
+    <!-- 수정 / 삭제 -->
+    <div class="article-actions"
+         sec:authorize="isAuthenticated()"
+         th:if="${review.author != null and #authentication.getPrincipal().username == review.author.username}">
+        <a th:href="@{|/review/modify/${review.id}|}"
+           class="btn btn-sm btn-outline-primary">수정</a>
+        <a href="javascript:void(0)"
+           th:data-uri="@{|/review/delete/${review.id}|}"
+           class="delete btn btn-sm btn-outline-danger">삭제</a>
     </div>
 
 
 
-    <!-- -------------------------------
-         댓글 목록
-    -------------------------------- -->
-    <h5 class="border-bottom my-4 py-2"
-        th:text="|${#lists.size(review.reviewCommentList)}개의 댓글이 있습니다.|"></h5>
+    <div class="article-divider">
+        <hr>
+    </div>
+    <h5 class="comment-title"
+        th:text="|댓글 ${#lists.size(review.reviewCommentList)}|"></h5>
 
-    <div class="card my-3 bg-warning-subtle"
+    <div class="comment-item"
          th:each="comment : ${review.reviewCommentList}">
-        <div class="card-body">
 
-            <!-- 댓글 내용 -->
-            <div class="card-text" th:text="${comment.content}"></div>
+        <div class="comment-content"
+             th:text="${comment.content}"></div>
 
-            <!-- 댓글 작성자 -->
-            <div class="d-flex justify-content-end">
-                <div class="badge bg-warning text-dark p-2">
-                    <div><span th:text="${comment.author.username}"></span></div>
-                    <div th:text="${#temporals.format(comment.created, 'yyyy-MM-dd HH:mm')}"></div>
-                </div>
-            </div>
+        <div class="comment-meta">
+            <span th:text="${comment.author.username}"></span>
+            ·
+            <span th:text="${#temporals.format(comment.created,'yyyy-MM-dd HH:mm')}"></span>
+        </div>
 
-            <!-- 댓글 수정/삭제 -->
-            <div class="mt-3">
-                <a th:href="@{|/reviewComment/modify/${comment.id}|}"
-                   class="btn btn-sm btn-outline-primary"
-                   sec:authorize="isAuthenticated()"
-                   th:if="${comment.author != null and #authentication.getPrincipal().username == comment.author.username}">
-                    수정
-                </a>
-
-                <a href="javascript:void(0)"
-                   th:data-uri="@{|/reviewComment/delete/${comment.id}|}"
-                   class="delete btn btn-sm btn-outline-danger"
-                   sec:authorize="isAuthenticated()"
-                   th:if="${comment.author != null and #authentication.getPrincipal().username == comment.author.username}">
-                    삭제
-                </a>
-            </div>
-
+        <div class="comment-actions"
+             sec:authorize="isAuthenticated()"
+             th:if="${comment.author != null and #authentication.getPrincipal().username == comment.author.username}">
+            <a th:href="@{|/reviewComment/modify/${comment.id}|}">수정</a>
+            <a href="javascript:void(0)"
+               th:data-uri="@{|/reviewComment/delete/${comment.id}|}"
+               class="delete">삭제</a>
         </div>
     </div>
 
+    <!-- =========================
+         ✏ 댓글 작성 (작게)
+    ========================= -->
+    <form class="comment-form"
+          th:action="@{|/reviewComment/create/${review.id}|}"
+          method="post">
 
-
-    <!-- -------------------------------
-         댓글 작성 Form
-    -------------------------------- -->
-    <form class="my-4" th:action="@{|/reviewComment/create/${review.id}|}" method="post">
-
-        <!-- 비로그인 -->
         <textarea sec:authorize="isAnonymous()"
                   disabled
-                  class="form-control"
-                  rows="5"
-                  placeholder="로그인 후 작성 가능합니다."></textarea>
+                  rows="3"
+                  placeholder="로그인 후 댓글을 작성할 수 있습니다."></textarea>
 
-        <!-- 로그인 -->
         <textarea sec:authorize="isAuthenticated()"
-                  class="form-control"
                   name="content"
-                  rows="5"
+                  rows="3"
                   placeholder="댓글을 입력하세요"></textarea>
 
-        <button type="submit" class="btn btn-primary mt-3">댓글 등록</button>
+        <button type="submit" class="btn btn-primary btn-sm">
+            등록
+        </button>
     </form>
 
 </div>
 
-
-<!-- -------------------------------
-     삭제 스크립트
--------------------------------- -->
 <th:block layout:fragment="script">
     <script>
-        $(function() {
+        $(function () {
             $(".delete").click(function () {
                 if (confirm("정말 삭제하시겠습니까?")) {
                     window.location.href = $(this).data("uri");

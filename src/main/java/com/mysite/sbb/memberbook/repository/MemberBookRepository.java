@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface MemberBookRepository extends JpaRepository<MemberBook, Long> {
     List<MemberBook> findByMemberAndStatus(Member member, Status status);
+
+    List<MemberBook> findByMember(Member member);
 }

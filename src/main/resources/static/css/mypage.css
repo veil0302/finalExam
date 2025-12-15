@@ -60,6 +60,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 1.2rem;
+
 }
 
 /* =========================
@@ -69,7 +70,6 @@
     background: var(--bg-card);
     border-radius: var(--radius);
     padding: 1.4rem;
-    height: 100%;
 }
 
 /* =========================
@@ -160,4 +160,128 @@
     background: #2f2f34;
     color: var(--text-light);
     border-color: var(--accent);
+}
+
+/* =========================
+   📚 Book Status Count Emphasis
+========================= */
+
+.status-count {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.count-number {
+    font-size: 2.1rem;
+    color: var(--accent);
+    line-height: 1;
+    text-align: right;
+
+}
+
+.count-label {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* =========================
+   📚 Reading Status Navigation
+========================= */
+
+.reading-nav {
+    display: flex;
+    gap: 10px;
+    background: var(--bg-card);
+    padding: 6px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.reading-nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.reading-nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-light);
+}
+
+/* 활성 탭 */
+.reading-nav-item.active {
+    background: var(--accent);
+    color: #fff;
+}
+.avg-read-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 260px; /* 도넛 카드와 높이 맞춤 */
+}
+
+.avg-read-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 세로 중앙 */
+    align-items: center;     /* 가로 중앙 */
+    text-align: center;
+}
+
+.avg-read-value {
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.avg-read-unit {
+    font-size: 1.1rem;
+    margin-left: 4px;
+}
+
+.avg-read-desc {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+/* =========================
+   독서 전환율 카드
+========================= */
+
+.conversion-card {
+    min-height: 260px;
+}
+
+.conversion-wrapper {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto;
+}
+
+.conversion-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.conversion-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.conversion-percent {
+    font-size: 1.7rem;
+    font-weight: 800;
 }
