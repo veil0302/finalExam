@@ -72,7 +72,7 @@ public class MemberBookService {
         MemberBook mb = memberBookRepository.findById(memberBookId)
                 .orElseThrow(() -> new IllegalArgumentException("책 없음"));
 
-        mb.setStatus(Status.COMPLETED);
+                        mb.setStatus(Status.COMPLETED);
         mb.setCompletedDate(completedDate);
 
         memberBookRepository.save(mb);
@@ -126,6 +126,7 @@ public class MemberBookService {
         return result;
     }
 
+
     //완독 기준 소요시간 평균 계산
     public double getAverageReadDays(Member member) {
 
@@ -155,7 +156,6 @@ public class MemberBookService {
 
         return count == 0 ? 0 : (double) totalDays / count;
     }
-
 
 
 }

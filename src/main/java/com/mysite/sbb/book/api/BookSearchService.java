@@ -72,7 +72,7 @@ public class BookSearchService {
                     dto.setAuthor(item.get("author").asText());
                     dto.setPublisher(item.get("publisher").asText());
                     dto.setImage(item.get("image").asText());
-                    dto.setDescription(item.get("description").asText());
+                    dto.setDescription(item.get("description").asText()); //필요하면 사용
                     dto.setLink(item.get("link").asText());
                     // Category를 Map 유틸을 통해 문자열로 변환 후 설저ㅇ
                     list.add(dto);

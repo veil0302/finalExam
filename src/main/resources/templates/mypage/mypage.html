@@ -142,107 +142,107 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-        const thisYearCounts = [[${thisYearCounts}]];
-        const lastYearCounts = [[${lastYearCounts}]];
+        const thisYearCounts = [[${ thisYearCounts }]];
+        const lastYearCounts = [[${ lastYearCounts }]];
 
-    console.log(thisYearCounts);
-    console.log(lastYearCounts);
+        console.log(thisYearCounts);
+        console.log(lastYearCounts);
 
-    new Chart(document.getElementById("yearChart"), {
-        type: "bar",
-        data: {
-            labels: ["1월","2월","3월","4월","5월","6월",
-                     "7월","8월","9월","10월","11월","12월"],
-            datasets: [{
-                label: "완독한 책 수",
-                data: thisYearCounts,
-                backgroundColor: "#6c63ff"
-            }]
-        }
-    });
+        new Chart(document.getElementById("yearChart"), {
+            type: "bar",
+            data: {
+                labels: ["1월", "2월", "3월", "4월", "5월", "6월",
+                    "7월", "8월", "9월", "10월", "11월", "12월"],
+                datasets: [{
+                    label: "완독한 책 수",
+                    data: thisYearCounts,
+                    backgroundColor: "#6c63ff"
+                }]
+            }
+        });
 
 
-            new Chart(document.getElementById("compareChart"), {
+        new Chart(document.getElementById("compareChart"), {
             type: "line",
             data: {
-            labels: ["1월","2월","3월","4월","5월","6월",
-                     "7월","8월","9월","10월","11월","12월"],
-            datasets: [
-            {
-            label: [[${thisYear}]] + "년",
-            data: thisYearCounts,
-            borderColor: "#6c63ff",
-            backgroundColor: "rgba(108,99,255,0.3)",
-            borderWidth: 2,
-            tension: 0.3
-            },
-            {
-            label: [[${lastYear}]] + "년",
-            data: lastYearCounts,
-            borderColor: "#f38b4a",
-            backgroundColor: "rgba(243,139,74,0.3)",
-            borderWidth: 2,
-            tension: 0.3
-            }
-            ]
+                labels: ["1월", "2월", "3월", "4월", "5월", "6월",
+                    "7월", "8월", "9월", "10월", "11월", "12월"],
+                datasets: [
+                    {
+                        label: [[${ thisYear }]] + "년",
+                        data: thisYearCounts,
+                        borderColor: "#6c63ff",
+                        backgroundColor: "rgba(108,99,255,0.3)",
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: [[${ lastYear }]] + "년",
+                        data: lastYearCounts,
+                        borderColor: "#f38b4a",
+                        backgroundColor: "rgba(243,139,74,0.3)",
+                        borderWidth: 2,
+                        tension: 0.3
+                    }
+                ]
             },
             options: {
-            scales: {
-            y: { ticks: { color: "#fff" } },
-            x: { ticks: { color: "#fff" } }
-            },
-            plugins: { legend: { labels: { color: "#fff" } } }
-            }
-            });
-
-
-
-const readingCount = [[${#lists.size(readingList)}]];
-const completedCount = [[${#lists.size(completedList)}]];
-
-const totalRead = readingCount + completedCount;
-
-// 읽은 책이 0권이면 차트 의미 없음
-if (totalRead > 0) {
-
-    const completedPercent = Math.round(
-        (completedCount / totalRead) * 100
-    );
-
-    new Chart(document.getElementById("conversionChart"), {
-        type: "doughnut",
-        data: {
-            labels: ["완독", "읽는 중"],
-            datasets: [{
-                data: [completedPercent, 100 - completedPercent],
-                backgroundColor: [
-                    "#86db7a",   // 완독
-                    "#6c63ff"    // 읽는 중
-                ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-             width: 400,
-             height: 400,
-            cutout: "70%",
-            plugins: {
-                legend: {
-                    labels: { color: "#fff" }
+                scales: {
+                    y: { ticks: { color: "#fff" } },
+                    x: { ticks: { color: "#fff" } }
                 },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.label + " : " + context.raw + "%";
+                plugins: { legend: { labels: { color: "#fff" } } }
+            }
+        });
+
+
+
+        const readingCount = [[${ #lists.size(readingList) }]];
+        const completedCount = [[${ #lists.size(completedList) }]];
+
+        const totalRead = readingCount + completedCount;
+
+        // 읽은 책이 0권이면 차트 의미 없음
+        if (totalRead > 0) {
+
+            const completedPercent = Math.round(
+                (completedCount / totalRead) * 100
+            );
+
+            new Chart(document.getElementById("conversionChart"), {
+                type: "doughnut",
+                data: {
+                    labels: ["완독", "읽는 중"],
+                    datasets: [{
+                        data: [completedPercent, 100 - completedPercent],
+                        backgroundColor: [
+                            "#86db7a",   // 완독
+                            "#6c63ff"    // 읽는 중
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    width: 400,
+                    height: 400,
+                    cutout: "70%",
+                    plugins: {
+                        legend: {
+                            labels: { color: "#fff" }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return context.label + " : " + context.raw + "%";
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         }
-    });
-}
     </script>
 </th:block>
 </html>
